@@ -1,0 +1,34 @@
+CLI FILE RESCUE COMMAND LOG
+
+Student:
+Date:
+
+Paste or type the important commands you used below. Add a short explanation beside commands marked by your teacher during the mastery conference.
+
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.
+11.
+12.
+13.
+14.
+15.
+
+One command using a relative path:
+
+One command using .. in a path:
+
+One find command:
+
+One grep command:
+
+One command using output redirection:
+
+One command using a pipe:

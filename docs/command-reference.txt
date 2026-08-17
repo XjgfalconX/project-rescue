@@ -1,0 +1,3 @@
+Use COMMAND --help when you remember a command but not its options.
+Use man COMMAND when manual pages are available.
+Read error messages carefully before trying a different command.

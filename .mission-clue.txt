@@ -1,0 +1,6 @@
+RECOVERY NOTICE
+
+The obsolete backup is named app-backup-obsolete.py.
+The working backup must remain in mixed-files for archival purposes.
+
+Do not delete files based only on a guess. Inspect first, then act.

@@ -1,0 +1,2 @@
+docs\project-notes.txt:6:TODO: Add a player inventory after the initial commit.
+src\helpers.py:6:# TODO: Add room descriptions during the Python competency.

@@ -1,0 +1,6 @@
+PROJECT NOTES
+
+The current prototype prints the active room.
+The reorganized project will become the class's first Git repository.
+
+TODO: Add a player inventory after the initial commit.

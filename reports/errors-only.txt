@@ -1,0 +1,3 @@
+ERROR Player spawn point not configured
+ERROR Inventory test failed
+ERROR Save directory unavailable
