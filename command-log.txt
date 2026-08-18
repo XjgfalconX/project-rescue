@@ -5,30 +5,30 @@ Date:
 
 Paste or type the important commands you used below. Add a short explanation beside commands marked by your teacher during the mastery conference.
 
-1.
-2.
-3.
-4.
-5.
-6.
-7.
-8.
-9.
-10.
-11.
-12.
-13.
-14.
-15.
+1. ls
+2. cd .\project-rescue\
+3. pwd
+4. ls -force
+5. mkdir
+6. mv old-app.py app.py
+7. ls *.py
+8. ls -recurse | sls "ERROR" 
+9. line 8 > .\reports/errors-only.txt
+10. line 8 | measure-object -line > errors-only.txt
+11. cat testers.txt | Sort-Object -Unique > .\reports/unique-tester.txt
+12. ls -recurse | sls "TODO" //manually copy
+13. py app.py
+14. ls *.py > pyfiles.txt
+15. ls *.py -recurse | sls "import pygame"
 
-One command using a relative path:
+One command using a relative path: cd ..
 
-One command using .. in a path:
+One command using .. in a path: cd ..
 
-One find command:
+One find command: N/A
 
-One grep command:
+One grep command: sls "error"
 
-One command using output redirection:
+One command using output redirection: ls *.py > pyfiles.txt
 
-One command using a pipe:
+One command using a pipe: ls *.py -recurse | sls "import pygame"
