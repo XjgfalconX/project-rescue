@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/2048/2048.iml" filepath="$PROJECT_DIR$/2048/2048.iml" />
       <module fileurl="file://$PROJECT_DIR$/PLTracker.iml" filepath="$PROJECT_DIR$/PLTracker.iml" />
     </modules>
   </component>
