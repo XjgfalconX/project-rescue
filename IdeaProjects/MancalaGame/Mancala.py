@@ -6,10 +6,10 @@ def printBoard():
     print(" ----------------------------")
     for i in range(6, 0, -1):
         print(f" {board[0][i]:2} ", end=" ")
-    print()
-    print(board[1][7], "                          ", board[0][7])
+    print();
+    print(board[1][7], "                          ", board[0][7]
     print(f" {board[1][i]:2} ", end=" ")
-    print()
+    print();
     print(" ----------------------------")
     print("  1    2    3    4    5    6")
 
@@ -18,16 +18,37 @@ def printBoard():
 
 
 def addToPocketsForEachStone(pocketRow, pocketIndex):
-    boardSize = 7  # important for checking if it changes y level
+    boardSize = 7
+    initialRow = pocketRow
 
-    # if the index + the amount of stones is larger than the board size, change the y level
-    if (pocketIndex + board[pocketRow][pocketIndex] > boardSize):
-        remainder = pocketIndex + board[pocketRow][pocketIndex] % boardSize
+    # Pick up the stones from the selected pit
+    stones = board[pocketRow][pocketIndex]
+    board[pocketRow][pocketIndex] = 0
 
-        # do this after adding all the stones to the initial row
-        pocketRow = 1 - pocketRow  # absolute difference formula, 1 - x(1) = 0,    1 - x(0) = 1
-    # starting index0  x where the pocket is
-    for i in range(0, board[pocketRow][pocketIndex]):
+    # Track our current position as we move around the board
+    currentRow = pocketRow
+    currentIndex = pocketIndex
+
+    while stones > 0:
+        currentIndex += 1
+
+        if currentIndex >= boardSize:
+            currentRow = 1 - currentRow  # Absolute difference: 1 becomes 0 0 becomes 1
+            currentIndex = 0
+
+        # Check if the current index is a store and if it's the opponent's row
+        ifIndexIsStore = (currentIndex == 6)
+        isOpponentRow = (currentRow != initialRow)
+
+        # If it's the opponent's store skip it
+        if ifIndexIsStore and isOpponentRow:
+            continue
+
+        # Drop a stone in the current pit/store
+        board[currentRow][currentIndex] += 1
+        stones -= 1
+
+    return currentRow, currentIndex
 
 
 printBoard()
