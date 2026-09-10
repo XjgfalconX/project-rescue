@@ -2,17 +2,19 @@ board = [[4, 4, 4, 4, 4, 4, 0], [4, 4, 4, 4, 4, 4, 0]]
 player = 0
 
 
-def printBoard():
-   print(" 13   12   11   10    9    8")
-   print(" ----------------------------")
-   for i in range(6, 0, -1):
-       print(f" {board[0][i]:2} ", end=" ")
-   print();
-   print(board[1][7], "                          ", board[0][7]
-   print(f" {board[1][i]:2} ", end=" ")
-   print();
-   print(" ----------------------------")
-   print("  1    2    3    4    5    6")
+def printBoard(board):
+    print(" 13  12  11  10   9   8")
+    print(" --------------------------")
+    for i in range(5, -1, -1):
+        print(f" {board[1][i]:2} ", end="")
+    print()
+    print(f"{board[1][6]:2}                     {board[0][6]:2}")
+    for i in range(0, 6):
+        print(f" {board[0][i]:2} ", end="")
+    print()
+    print(" --------------------------")
+    print("  1   2   3   4   5   6")
+
 
 
    # functionality for adding the stones
@@ -64,37 +66,41 @@ def addToPocketsForEachStone(pocketRow, pocketIndex):
 
 
 def winQuestionMark():
-   rowTotal = 0
-   for i in board:
-       for j in i:
-           rowTotal += j
-	 if rowTotal == 0:
-	     return True
-   Return False
+    rowTotal = 0
+    for i in board:
+        for j in i:
+            rowTotal += j
+        if rowTotal == 0:
+            return True
+    return False
 
 
 def turnPlayer(player):
-   playerInput = input("What hole number would you like to move? ")
-   match player:
-       case 0:
+    playerInput = int(input("What hole number would you like to move? "))
+    match player:
+        case 0:
             if playerInput > 6 or playerInput < 1:
-               print("Please enter a number between 1 and 6")
-               turnPlayer(player)
-	        elif addtoPocketsForEachStone(player, playerInput) == 7:
-		        print("Bonus round!")
+                print("Please enter a number between 1 and 6")
                 turnPlayer(player)
-       case 1:
-           if playerInput > 13 or playerInput < 8:
-               print("Please enter a number between 8 and 13")
-           elif addtoPocketsForEachStone(player, int(playerInput)) == 14:
+            elif addToPocketsForEachStone(player, playerInput-1) == 7:
                 print("Bonus round!")
                 turnPlayer(player)
-   printBoard()
-   return 1 - player
+        case 1:
+            if playerInput > 13 or playerInput < 8:
+                print("Please enter a number between 8 and 13")
+            elif addToPocketsForEachStone(player, int(playerInput-1)) == 14:
+                print("Bonus round!")
+                turnPlayer(player)
+                printBoard(board)
 
 
 def startGame():
-   printBoard()
-   while winQuestionMark() != True:
-       player = turnPlayer(player)
-   print("Congrats! It’s over!")
+    winner = 0
+    printBoard(board)
+    while winQuestionMark() != True:
+        turnPlayer(winner)
+        winner = 1 - winner
+        printBoard(board)
+    print(f"Congrats! Player {player} Won! It’s over!")
+
+startGame()
