@@ -1,5 +1,6 @@
 board = [[4, 4, 4, 4, 4, 4, 0], [4, 4, 4, 4, 4, 4, 0]]
-player = 0
+player = 1
+bonus = False
 
 
 def printBoard(board):
@@ -23,7 +24,7 @@ def printBoard(board):
 
 
 
-def addToPocketsForEachStone(pocketRow, pocketIndex):
+def addToPocketsForEachStone(pocketRow, pocketIndex, returnVariation):
    boardSize = 7
    initialRow = pocketRow
 
@@ -62,8 +63,13 @@ def addToPocketsForEachStone(pocketRow, pocketIndex):
        stones -= 1
 
 
-   return currentIndex
+   return currentIndex if returnVariation == False else currentRow, currentIndex
 
+def stealFromOther(stoneRow, stoneIndex):
+    tempStoneRow = 1-stoneRow
+    temp = board[tempStoneRow][stoneIndex]
+    board[stoneRow][stoneIndex] = 0
+    board[stoneRow, 6] += temp
 
 def winQuestionMark():
     rowTotal = 0
@@ -75,31 +81,36 @@ def winQuestionMark():
     return False
 
 
-def turnPlayer(player):
+def turnPlayer(player, bonus):
     playerInput = int(input("What hole number would you like to move? "))
+
+    if not bonus:
+        player = 1 - player
     match player:
         case 0:
             if playerInput > 6 or playerInput < 1:
                 print("Please enter a number between 1 and 6")
-                turnPlayer(player)
-            elif addToPocketsForEachStone(player, playerInput-1) == 7:
+                turnPlayer(player, True)
+            elif addToPocketsForEachStone(player, int(playerInput-1), False) == 7:
                 print("Bonus round!")
-                turnPlayer(player)
+                turnPlayer(player, True)
+            else:
+                return
         case 1:
             if playerInput > 13 or playerInput < 8:
                 print("Please enter a number between 8 and 13")
-            elif addToPocketsForEachStone(player, int(playerInput-1)) == 14:
+                turnPlayer(player, True)
+            elif addToPocketsForEachStone(player, int(playerInput-8), False) == 7:
                 print("Bonus round!")
-                turnPlayer(player)
-                printBoard(board)
-
+                turnPlayer(player, True)
+            else:
+                return
 
 def startGame():
-    winner = 0
+    player = 1
     printBoard(board)
     while winQuestionMark() != True:
-        turnPlayer(winner)
-        winner = 1 - winner
+        turnPlayer(player, False)
         printBoard(board)
     print(f"Congrats! Player {player} Won! It’s over!")
 
