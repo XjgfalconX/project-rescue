@@ -71,47 +71,46 @@ def stealFromOther(stoneRow, stoneIndex):
     board[stoneRow][stoneIndex] = 0
     board[stoneRow, 6] += temp
 
-def winQuestionMark():
-    rowTotal = 0
-    for i in board:
-        for j in i:
-            rowTotal += j
-        if rowTotal == 0:
-            return True
-    return False
+def winCheck(player):
+    boardIsEmpty = True
+
+    for i in range(len(board[player])):
+        if board[player][i] != 0:
+            boardIsEmpty = False
+    return True;
 
 
-def turnPlayer(player, bonus):
+def turnPlayer(player):
     playerInput = int(input("What hole number would you like to move? "))
-
-    if not bonus:
-        player = 1 - player
     match player:
         case 0:
             if playerInput > 6 or playerInput < 1:
                 print("Please enter a number between 1 and 6")
-                turnPlayer(player, True)
+                return turnPlayer(player)
             elif addToPocketsForEachStone(player, int(playerInput-1), False) == 7:
                 print("Bonus round!")
-                turnPlayer(player, True)
+                return turnPlayer(player)
             else:
-                return
+                return 1 - player
         case 1:
             if playerInput > 13 or playerInput < 8:
                 print("Please enter a number between 8 and 13")
-                turnPlayer(player, True)
+                return turnPlayer(player)
             elif addToPocketsForEachStone(player, int(playerInput-8), False) == 7:
                 print("Bonus round!")
-                turnPlayer(player, True)
+                return turnPlayer(player)
             else:
-                return
+                return 1 - player
 
 def startGame():
     player = 1
     printBoard(board)
-    while winQuestionMark() != True:
-        turnPlayer(player, False)
+    winCondition = False
+    winChecker = False
+    while not winChecker:
+        winChecker = winCheck(player)
+        player = turnPlayer(player)
         printBoard(board)
-    print(f"Congrats! Player {player} Won! It’s over!")
+    print(f"Congrats! Player {player} Won! It's over!")
 
 startGame()
