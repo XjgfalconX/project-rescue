@@ -63,13 +63,14 @@ def addToPocketsForEachStone(pocketRow, pocketIndex, returnVariation):
        stones -= 1
 
 
-   return currentIndex if returnVariation == False else currentRow, currentIndex
+   return (currentRow, currentIndex) if returnVariation else currentIndex
 
 def stealFromOther(stoneRow, stoneIndex):
+    print("DYNHFDJYHGFYKUFHKUF")
     tempStoneRow = 1-stoneRow
     temp = board[tempStoneRow][stoneIndex]
     board[stoneRow][stoneIndex] = 0
-    board[stoneRow, 6] += temp
+    board[stoneRow][6] += temp
 
 def winCheck(player):
     boardIsEmpty = True
@@ -77,28 +78,49 @@ def winCheck(player):
     for i in range(len(board[player])):
         if board[player][i] != 0:
             boardIsEmpty = False
-    return True;
+    return boardIsEmpty;
 
 
 def turnPlayer(player):
     playerInput = int(input("What hole number would you like to move? "))
+
     match player:
         case 0:
             if playerInput > 6 or playerInput < 1:
                 print("Please enter a number between 1 and 6")
                 return turnPlayer(player)
-            elif addToPocketsForEachStone(player, int(playerInput-1), False) == 7:
+
+            stonesAtIndex = board[player][playerInput-1]
+            landing = stonesAtIndex + playerInput - 2
+            landingValue = board[player][landing]
+            moveIndex = addToPocketsForEachStone(player, int(playerInput-1), False)
+
+            if moveIndex == 6:
                 print("Bonus round!")
+                printBoard(board)
                 return turnPlayer(player)
+            elif landingValue == 0:
+                stealFromOther(player, moveIndex)
+
             else:
                 return 1 - player
         case 1:
             if playerInput > 13 or playerInput < 8:
                 print("Please enter a number between 8 and 13")
                 return turnPlayer(player)
-            elif addToPocketsForEachStone(player, int(playerInput-8), False) == 7:
+
+            stonesAtIndex = board[player][playerInput-8]
+            landing = stonesAtIndex + playerInput - 9
+            landingValue = board[player][landing]
+            moveIndex = addToPocketsForEachStone(player, int(playerInput - 8), False)
+
+            if moveIndex == 6:
                 print("Bonus round!")
+                printBoard(board)
                 return turnPlayer(player)
+            elif landingValue == 0:
+                stealFromOther(player, moveIndex)
+
             else:
                 return 1 - player
 
