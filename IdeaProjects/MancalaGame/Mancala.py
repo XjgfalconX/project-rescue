@@ -89,10 +89,11 @@ def boardSweep(player):
 
 def turnPlayer(player):
     playerInput = int(input("What hole number would you like to move? "))
-    if(board[player][playerInput] == 0):
-        return turnPlayer(player)
+
     match player:
         case 0:
+            if (board[player][playerInput] == 0):
+                return turnPlayer(player)
             if playerInput > 6 or playerInput < 1:
                 print("Please enter a number between 1 and 6")
                 return turnPlayer(player)
@@ -112,6 +113,8 @@ def turnPlayer(player):
             else:
                 return 1 - player
         case 1:
+            if (board[player][playerInput-8] == 0):
+                return turnPlayer(player)
             if playerInput > 13 or playerInput < 8:
                 print("Please enter a number between 8 and 13")
                 return turnPlayer(player)
