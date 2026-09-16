@@ -66,19 +66,18 @@ def addToPocketsForEachStone(pocketRow, pocketIndex, returnVariation):
    return (currentRow, currentIndex) if returnVariation else currentIndex
 
 def stealFromOther(stoneRow, stoneIndex):
-    print("DYNHFDJYHGFYKUFHKUF")
-    tempStoneRow = 1-stoneRow
-    temp = board[tempStoneRow][stoneIndex]
-    board[stoneRow][stoneIndex] = 0
-    board[stoneRow][6] += temp
-
+    tempRow = 1 - stoneRow                  #save the row
+    temp = board[tempRow][5 - stoneIndex]   #the stones in the opponents pit, it's 5 - SI because the rows go in opposite directions
+    board[tempRow][5 - stoneIndex] = 0      #set opponents index to 0
+    board[stoneRow][stoneIndex] = 0         #set your own index to 0
+    board[stoneRow][6] += temp + 1
 def winCheck(player):
     boardIsEmpty = True
 
     for i in range(len(board[player])):
         if board[player][i] != 0:
             boardIsEmpty = False
-    return boardIsEmpty;
+    return boardIsEmpty
 
 
 def turnPlayer(player):
@@ -90,17 +89,17 @@ def turnPlayer(player):
                 print("Please enter a number between 1 and 6")
                 return turnPlayer(player)
 
-            stonesAtIndex = board[player][playerInput-1]
-            landing = stonesAtIndex + playerInput - 2
-            landingValue = board[player][landing]
-            moveIndex = addToPocketsForEachStone(player, int(playerInput-1), False)
+            moveRow, moveIndex = addToPocketsForEachStone(player, int(playerInput - 1), True)
 
             if moveIndex == 6:
                 print("Bonus round!")
                 printBoard(board)
                 return turnPlayer(player)
-            elif landingValue == 0:
-                stealFromOther(player, moveIndex)
+
+            landingValue = board[moveRow][moveIndex]  # will be 1 if the pit was empty before
+            if landingValue == 1 and moveRow == player:
+                stealFromOther(moveRow, moveIndex)
+                return 1 - player
 
             else:
                 return 1 - player
@@ -109,17 +108,17 @@ def turnPlayer(player):
                 print("Please enter a number between 8 and 13")
                 return turnPlayer(player)
 
-            stonesAtIndex = board[player][playerInput-8]
-            landing = stonesAtIndex + playerInput - 9
-            landingValue = board[player][landing]
-            moveIndex = addToPocketsForEachStone(player, int(playerInput - 8), False)
+            moveRow, moveIndex = addToPocketsForEachStone(player, int(playerInput - 8), True)
 
             if moveIndex == 6:
                 print("Bonus round!")
                 printBoard(board)
                 return turnPlayer(player)
-            elif landingValue == 0:
-                stealFromOther(player, moveIndex)
+
+            landingValue = board[moveRow][moveIndex]  # will be 1 if the pit was empty before
+            if landingValue == 1 and moveRow == player:
+                stealFromOther(moveRow, moveIndex)
+                return 1 - player
 
             else:
                 return 1 - player
