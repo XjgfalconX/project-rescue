@@ -1,8 +1,7 @@
 board = [[4, 4, 4, 4, 4, 4, 0], [4, 4, 4, 4, 4, 4, 0]]
-# All bugs stem from win check // Sorry :P
-# Fix winCheck to exclude the store, this breaks the game
-# Add a sweep-remaining-stones-to-store step when the game ends.
-# Compare board[0][6] vs board[1][6] to determine the actual winner (including ties).
+player = 1
+bonus = False
+
 
 def printBoard(board):
     print(" 13  12  11  10   9   8")
@@ -21,52 +20,77 @@ def addToPocketsForEachStone(pocketRow, pocketIndex, returnVariation):
    boardSize = 7
    initialRow = pocketRow
 
-   # Pick up the stones from the selected pit
    stones = board[pocketRow][pocketIndex]
    board[pocketRow][pocketIndex] = 0
 
-   # Track our current position as we move around the board
    currentRow = pocketRow
    currentIndex = pocketIndex
 
+
    while stones > 0:
        currentIndex += 1
+
 
        if currentIndex >= boardSize:
            currentRow = 1 - currentRow  # Absolute difference: 1 becomes 0 0 becomes 1
            currentIndex = 0
 
-       # Check if the current index is a store and if it's the opponent's row
        ifIndexIsStore = (currentIndex == 6)
        isOpponentRow = (currentRow != initialRow)
 
-       # If it's the opponent's store skip it
        if ifIndexIsStore and isOpponentRow:
            continue
 
-       # Drop a stone in the current pit/store
        board[currentRow][currentIndex] += 1
        stones -= 1
 
    return (currentRow, currentIndex) if returnVariation else currentIndex
 
 def stealFromOther(stoneRow, stoneIndex):
+
     tempRow = 1 - stoneRow                  #save the row
+    if(board[tempRow][5 - stoneIndex] == 0):
+        return
     temp = board[tempRow][5 - stoneIndex]   #the stones in the opponents pit, it's 5 - SI because the rows go in opposite directions
     board[tempRow][5 - stoneIndex] = 0      #set opponents index to 0
     board[stoneRow][stoneIndex] = 0         #set your own index to 0
     board[stoneRow][6] += temp + 1
-def winCheck(player):
-    boardIsEmpty = True
 
-    for i in range(len(board[player])):
-        if board[player][i] != 0:
-            boardIsEmpty = False
-    return true
+
+def winCheck(playerOrWin):
+    oneIsEmpty = all(pit == 0 for pit in board[0][:7])
+    twoIsEmpty = all(pit == 0 for pit in board[1][:7])
+
+    gameOver = oneIsEmpty or twoIsEmpty
+
+    if not gameOver:
+        return False
+
+    # Return game status if True, otherwise return the winner
+    if playerOrWin:
+        return True
+    if(oneIsEmpty):
+        boardSweep(0)
+    elif (twoIsEmpty):
+        boardSweep(1)
+
+    if board[0][6] > board[1][6]:
+        return "Player 1"
+    elif board[1][6] > board[0][6]:
+        return "Player 2"
+    else:
+        return "Tie"
+
+def boardSweep(player):
+    for i in range(len(board[player])-1):
+        temp = board[player][i]
+        board[player][i] = 0
+        board[player][6] += temp
 
 def turnPlayer(player):
     playerInput = int(input("What hole number would you like to move? "))
-
+    if(board[player][playerInput] == 0):
+        return turnPlayer(player)
     match player:
         case 0:
             if playerInput > 6 or playerInput < 1:
@@ -99,7 +123,7 @@ def turnPlayer(player):
                 printBoard(board)
                 return turnPlayer(player)
 
-            landingValue = board[moveRow][moveIndex]  # will be 1 if the pit was empty before
+            landingValue = board[moveRow][moveIndex]
             if landingValue == 1 and moveRow == player:
                 stealFromOther(moveRow, moveIndex)
                 return 1 - player
@@ -110,14 +134,15 @@ def turnPlayer(player):
 def startGame():
     player = 1
     printBoard(board)
-    winCondition = False
-    winChecker = False
     while True:
-        winChecker = winCheck(player)
-        if(winChecker):
+        winChecker = winCheck(True)
+        if winChecker:
+            printBoard(board)
             break
         player = turnPlayer(player)
         printBoard(board)
-    print(f"Congrats! Player {player} Won! It's over!")
+
+
+    print(f"Congrats! Player {winCheck(False)} Won! It's over!")
 
 startGame()
